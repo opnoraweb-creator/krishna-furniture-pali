@@ -1,13 +1,128 @@
 {
   "shopName": "Krishna Decor Furniture",
-  "tagline": "Furniture Wholesale & Retail",
+  "tagline": "Furniture • Interiors • Decor • Sleepwell",
   "phone": "9829781979",
   "whatsapp": "919829781979",
-  "address": "Near Bangar School, Pali, Rajasthan",
-  "mapQuery": "Krishna Decor Furniture, Bangar School, Pali, Rajasthan",
-  "about": "Krishna Decor Furniture is a wholesale and retail furniture shop in Pali, Rajasthan.",
-  "hours": "",
+
+  "address": "Near Traffic Police Control Room, Opposite Side Bangar School, Pali, Rajasthan.",
+
+  "mapUrl": "https://maps.app.goo.gl/byF8p2iFVTduc25B6",
+
+  "instagram": "https://www.instagram.com/krishna_decor_furniture_pali?psln=cWV1c2xmZmY1b2Nk",
+
+  "about": "Krishna Decor Furniture offers furniture, home decor, office furniture and building materials in Pali, Rajasthan. Wholesale and Retail.",
+
   "ownerPhoto": "assets/images/owner-photo.jpg",
-  "categories": [],
+
+  "categories": [
+    {
+      "id": "furniture-home-decor",
+      "name": "Furniture & Home Decor",
+      "image": "assets/images/categories/furniture-home-decor.jpg",
+      "active": true,
+
+      "subcategories": [
+        {
+          "id": "sofa",
+          "name": "Sofa",
+          "image": "assets/images/categories/sofa.jpg",
+          "active": true
+        },
+        {
+          "id": "chair",
+          "name": "Chair",
+          "image": "assets/images/categories/chair.jpg",
+          "active": true
+        },
+        {
+          "id": "table",
+          "name": "Table",
+          "image": "assets/images/categories/table.jpg",
+          "active": true
+        },
+        {
+          "id": "door",
+          "name": "Door",
+          "image": "assets/images/categories/door.jpg",
+          "active": true
+        },
+        {
+          "id": "home-decor",
+          "name": "Home Decor",
+          "image": "assets/images/categories/home-decor.jpg",
+          "active": true
+        },
+        {
+          "id": "furniture-other",
+          "name": "Other",
+          "image": "assets/images/categories/furniture-other.jpg",
+          "active": true
+        }
+      ]
+    },
+
+    {
+      "id": "building-material",
+      "name": "Building Material",
+      "image": "assets/images/categories/building-material.jpg",
+      "active": true,
+
+      "subcategories": [
+        {
+          "id": "window",
+          "name": "Window",
+          "image": "assets/images/categories/window.jpg",
+          "active": true
+        },
+        {
+          "id": "glass",
+          "name": "Glass",
+          "image": "assets/images/categories/glass.jpg",
+          "active": true
+        },
+        {
+          "id": "gate",
+          "name": "Gate",
+          "image": "assets/images/categories/gate.jpg",
+          "active": true
+        },
+        {
+          "id": "building-other",
+          "name": "Other",
+          "image": "assets/images/categories/building-other.jpg",
+          "active": true
+        }
+      ]
+    },
+
+    {
+      "id": "office-material",
+      "name": "Office Material",
+      "image": "assets/images/categories/office-material.jpg",
+      "active": true,
+
+      "subcategories": [
+        {
+          "id": "office-chair",
+          "name": "Chair",
+          "image": "assets/images/categories/office-chair.jpg",
+          "active": true
+        },
+        {
+          "id": "office-table",
+          "name": "Table",
+          "image": "assets/images/categories/office-table.jpg",
+          "active": true
+        },
+        {
+          "id": "office-other",
+          "name": "Other",
+          "image": "assets/images/categories/office-other.jpg",
+          "active": true
+        }
+      ]
+    }
+  ],
+
   "products": []
 }
