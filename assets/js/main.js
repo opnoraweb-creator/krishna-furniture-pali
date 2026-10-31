@@ -1,48 +1,68 @@
+/* ==========================================
+   KRISHNA DECOR FURNITURE
+   FINAL WEBSITE JAVASCRIPT
+   CATEGORY-WISE PRODUCT GRID
+========================================== */
+
 const SHOP_DATA_URL = "data/shops/krishna-decor.json";
 const PRODUCTS_DATA_URL = "data/products/krishna-decor-products.json";
 
 const DEFAULT_MAP_URL = "https://maps.app.goo.gl/byF8p2iFVTduc25B6";
-const DEFAULT_INSTAGRAM_URL = "https://www.instagram.com/krishna_decor_furniture_pali?psln=cWV1c2xmZmY1b2Nk";
 
-const $ = (id) => document.getElementById(id);
+const DEFAULT_INSTAGRAM_URL =
+  "https://www.instagram.com/krishna_decor_furniture_pali?psln=cWV1c2xmZmY1b2Nk";
 
 let shopData = {};
 let allProducts = [];
-let selectedCategory = null;
-let selectedSubcategory = null;
 
-const categoriesBox = $("categories");
-const subcategoriesBox = $("subcategories");
-const productsBox = $("products");
+const $ = id => document.getElementById(id);
+
+/* ==========================================
+   BASIC HELPERS
+========================================== */
 
 function setText(id, value) {
   const element = $(id);
-  if (element && value !== undefined) element.textContent = value;
+
+  if (element && value !== undefined && value !== null) {
+    element.textContent = value;
+  }
 }
 
 function setLink(id, url) {
   const element = $(id);
-  if (element && url) element.href = url;
+
+  if (element && url) {
+    element.href = url;
+  }
 }
 
 function setImage(id, url) {
   const element = $(id);
-  if (element && url) element.src = url;
-}
 
-function showSection(id, visible) {
-  const element = $(id);
-  if (element) element.hidden = !visible;
+  if (element && url) {
+    element.src = url;
+  }
 }
 
 function createElement(tag, className, text) {
   const element = document.createElement(tag);
-  if (className) element.className = className;
-  if (text !== undefined) element.textContent = text;
+
+  if (className) {
+    element.className = className;
+  }
+
+  if (text !== undefined) {
+    element.textContent = text;
+  }
+
   return element;
 }
 
-// SHOP INFORMATION
+/* ==========================================
+   SHOP INFORMATION
+========================================== */
+
 function initializeShop(data) {
   shopData = data;
 
@@ -53,12 +73,15 @@ function initializeShop(data) {
   setText("address", data.address);
   setText("phoneText", data.phone);
   setText("footerName", data.shopName);
+  setText("footerNameCopyright", data.shopName);
   setText("year", new Date().getFullYear());
 
   setImage("ownerPhoto", data.ownerPhoto);
 
   const phoneUrl = `tel:${data.phone || ""}`;
-  const whatsappUrl = `https://wa.me/${data.whatsapp || ""}`;
+
+  const whatsappUrl =
+    `https://wa.me/${data.whatsapp || ""}`;
 
   ["callTop", "callButton", "contactCall"].forEach(id => {
     setLink(id, phoneUrl);
@@ -68,203 +91,162 @@ function initializeShop(data) {
     setLink(id, whatsappUrl);
   });
 
-  setLink("instagramTop", data.instagram || DEFAULT_INSTAGRAM_URL);
-  setLink("mapLink", data.mapUrl || DEFAULT_MAP_URL);
-
-  renderMainCategories(data.categories || []);
-}
-
-// MAIN CATEGORIES
-function renderMainCategories(categories) {
-  if (!categoriesBox) return;
-
-  categoriesBox.innerHTML = "";
-
-  categories.filter(category => category.active !== false).forEach(category => {
-    const card = createElement("button", "category-card");
-    card.type = "button";
-
-    const image = createElement("img");
-    image.src = category.image || "assets/images/categories/default.jpg";
-    image.alt = category.name;
-    image.loading = "lazy";
-
-    const title = createElement("h3", "", category.name);
-
-    card.append(image, title);
-
-    card.addEventListener("click", () => {
-      openSubcategories(category);
-    });
-
-    categoriesBox.appendChild(card);
-  });
-}
-
-// SUBCATEGORIES
-function openSubcategories(category) {
-  selectedCategory = category;
-  selectedSubcategory = null;
-
-  setText("subcategoriesHeading", category.name);
-
-  showSection("categoriesSection", false);
-  showSection("subcategoriesSection", true);
-  showSection("productsSection", false);
-
-  renderSubcategories(category);
-}
-
-function renderSubcategories(category) {
-  if (!subcategoriesBox) return;
-
-  subcategoriesBox.innerHTML = "";
-
-  (category.subcategories || [])
-    .filter(item => item.active !== false)
-    .forEach(subcategory => {
-      const card = createElement("button", "category-card");
-      card.type = "button";
-
-      const image = createElement("img");
-      image.src = subcategory.image || "assets/images/categories/default.jpg";
-      image.alt = subcategory.name;
-      image.loading = "lazy";
-
-      const title = createElement("h3", "", subcategory.name);
-
-      card.append(image, title);
-
-      card.addEventListener("click", () => {
-        openProducts(category, subcategory);
-      });
-
-      subcategoriesBox.appendChild(card);
-    });
-}
-
-// PRODUCTS
-function openProducts(category, subcategory) {
-  selectedCategory = category;
-  selectedSubcategory = subcategory;
-
-  setText(
-    "productsHeading",
-    `${category.name} - ${subcategory.name}`
+  setLink(
+    "instagramTop",
+    data.instagram || DEFAULT_INSTAGRAM_URL
   );
 
-  showSection("categoriesSection", false);
-  showSection("subcategoriesSection", false);
-  showSection("productsSection", true);
-
-  renderProducts(
-    allProducts.filter(product =>
-      product.active !== false &&
-      product.categoryId === category.id &&
-      product.subcategoryId === subcategory.id
-    )
+  setLink(
+    "mapLink",
+    data.mapUrl || DEFAULT_MAP_URL
   );
 }
 
-function renderProducts(products) {
-  if (!productsBox) return;
+/* ==========================================
+   CATEGORY NAME HELPERS
+========================================== */
 
-  productsBox.innerHTML = "";
+function getCategoryName(categoryId) {
+  const categories = shopData.categories || [];
 
-  if (!products.length) {
-    productsBox.appendChild(
-      createElement("p", "empty-message", "Abhi is category mein products upload nahi kiye gaye hain.")
+  const category = categories.find(
+    item => item.id === categoryId
+  );
+
+  return category ? category.name : categoryId;
+}
+
+function getSubcategoryName(categoryId, subcategoryId) {
+  const categories = shopData.categories || [];
+
+  const category = categories.find(
+    item => item.id === categoryId
+  );
+
+  if (category && category.subcategories) {
+    const subcategory = category.subcategories.find(
+      item => item.id === subcategoryId
     );
-    return;
+
+    if (subcategory) {
+      return subcategory.name;
+    }
   }
 
-  products.forEach(product => {
-    const card = createElement("article", "product-card");
+  const names = {
+    "sofa": "Sofa",
+    "chair": "Chair",
+    "table": "Table",
+    "bed": "Bed",
+    "door": "Door",
+    "home-decor": "Home Decor",
+    "furniture-other": "Other",
+    "window": "Window",
+    "glass": "Glass",
+    "gate": "Gate",
+    "building-other": "Other",
+    "office-chair": "Chair",
+    "office-table": "Table",
+    "office-other": "Other"
+  };
 
-    const images = [
-      product.image,
-      ...(product.gallery || [])
-    ].filter((image, index, array) =>
-      image && array.indexOf(image) === index
-    );
-
-    const mainImage = createElement("img", "product-image");
-    mainImage.src = images[0] || "assets/images/categories/default.jpg";
-    mainImage.alt = product.name;
-    mainImage.loading = "lazy";
-
-    mainImage.addEventListener("click", () => {
-      openPhoto(images, 0);
-    });
-
-    const title = createElement("h3", "", product.name);
-    const description = createElement("p", "product-description", product.description || "");
-
-    card.append(mainImage, title);
-
-    if (product.description) {
-      card.appendChild(description);
-    }
-
-    if (images.length > 1) {
-      const gallery = createElement("div", "product-gallery");
-
-      images.forEach((image, index) => {
-        const thumb = createElement("img", "gallery-thumb");
-        thumb.src = image;
-        thumb.alt = `${product.name} photo ${index + 1}`;
-        thumb.loading = "lazy";
-
-        thumb.addEventListener("click", () => {
-          openPhoto(images, index);
-        });
-
-        gallery.appendChild(thumb);
-      });
-
-      card.appendChild(gallery);
-    }
-
-    productsBox.appendChild(card);
-  });
+  return names[subcategoryId] || subcategoryId;
 }
 
-// PHOTO VIEWER
-function openPhoto(images, startIndex) {
+/* ==========================================
+   PRODUCT IMAGE VIEWER
+========================================== */
+
+function openPhoto(images, startIndex = 0) {
+  if (!images || !images.length) return;
+
   let currentIndex = startIndex;
 
-  const overlay = createElement("div", "photo-overlay");
-  const image = createElement("img", "photo-viewer-image");
+  const overlay = createElement(
+    "div",
+    "photo-overlay"
+  );
 
-  const closeButton = createElement("button", "photo-close", "×");
+  const image = createElement(
+    "img",
+    "photo-viewer-image"
+  );
+
+  const closeButton = createElement(
+    "button",
+    "photo-close",
+    "×"
+  );
+
+  const previousButton = createElement(
+    "button",
+    "photo-previous",
+    "‹"
+  );
+
+  const nextButton = createElement(
+    "button",
+    "photo-next",
+    "›"
+  );
+
   closeButton.type = "button";
-  closeButton.setAttribute("aria-label", "Close image");
-
-  const previousButton = createElement("button", "photo-previous", "‹");
   previousButton.type = "button";
-
-  const nextButton = createElement("button", "photo-next", "›");
   nextButton.type = "button";
+
+  closeButton.setAttribute("aria-label", "Close image");
+  previousButton.setAttribute("aria-label", "Previous image");
+  nextButton.setAttribute("aria-label", "Next image");
 
   function updateImage() {
     image.src = images[currentIndex];
   }
 
   previousButton.addEventListener("click", () => {
-    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    currentIndex =
+      (currentIndex - 1 + images.length) % images.length;
+
     updateImage();
   });
 
   nextButton.addEventListener("click", () => {
-    currentIndex = (currentIndex + 1) % images.length;
+    currentIndex =
+      (currentIndex + 1) % images.length;
+
     updateImage();
   });
 
-  closeButton.addEventListener("click", () => overlay.remove());
+  closeButton.addEventListener("click", () => {
+    overlay.remove();
+  });
 
   overlay.addEventListener("click", event => {
-    if (event.target === overlay) overlay.remove();
+    if (event.target === overlay) {
+      overlay.remove();
+    }
   });
+
+  function keyboardHandler(event) {
+    if (!document.body.contains(overlay)) {
+      document.removeEventListener("keydown", keyboardHandler);
+      return;
+    }
+
+    if (event.key === "Escape") {
+      overlay.remove();
+      document.removeEventListener("keydown", keyboardHandler);
+    }
+
+    if (event.key === "ArrowRight") {
+      nextButton.click();
+    }
+
+    if (event.key === "ArrowLeft") {
+      previousButton.click();
+    }
+  }
+
+  document.addEventListener("keydown", keyboardHandler);
 
   overlay.append(
     closeButton,
@@ -274,70 +256,303 @@ function openPhoto(images, startIndex) {
   );
 
   document.body.appendChild(overlay);
+
   updateImage();
 }
 
-// BACK BUTTONS
-const backCategories = $("backCategories");
+/* ==========================================
+   PRODUCT CARD
+========================================== */
 
-if (backCategories) {
-  backCategories.addEventListener("click", () => {
-    showSection("categoriesSection", true);
-    showSection("subcategoriesSection", false);
-    showSection("productsSection", false);
-  });
-}
+function createProductCard(product) {
+  const card = createElement(
+    "article",
+    "product-card"
+  );
 
-// Product section mein dynamically back button
-function addProductsBackButton() {
-  const section = $("productsSection");
-  if (!section || $("backToSubcategories")) return;
-
-  const button = createElement("button", "back-button", "← Back to Subcategories");
-  button.id = "backToSubcategories";
-  button.type = "button";
-
-  button.addEventListener("click", () => {
-    if (selectedCategory) {
-      openSubcategories(selectedCategory);
-    }
+  const images = [
+    product.image,
+    ...(product.gallery || [])
+  ].filter((image, index, array) => {
+    return image && array.indexOf(image) === index;
   });
 
-  section.prepend(button);
+  const mainImage = createElement(
+    "img",
+    "product-image"
+  );
+
+  mainImage.src = images[0] || "";
+  mainImage.alt = product.name || "Furniture product";
+  mainImage.loading = "lazy";
+
+  mainImage.addEventListener("click", () => {
+    openPhoto(images, 0);
+  });
+
+  const title = createElement(
+    "h3",
+    "product-title",
+    product.name || "Product"
+  );
+
+  card.append(mainImage, title);
+
+  if (product.description) {
+    const description = createElement(
+      "p",
+      "product-description",
+      product.description
+    );
+
+    card.appendChild(description);
+  }
+
+  /* PRODUCT GALLERY */
+
+  if (images.length > 1) {
+    const gallery = createElement(
+      "div",
+      "product-gallery"
+    );
+
+    images.forEach((imagePath, index) => {
+      const thumbnail = createElement(
+        "img",
+        "gallery-thumb"
+      );
+
+      thumbnail.src = imagePath;
+      thumbnail.alt =
+        `${product.name} photo ${index + 1}`;
+
+      thumbnail.loading = "lazy";
+
+      thumbnail.addEventListener("click", () => {
+        openPhoto(images, index);
+      });
+
+      gallery.appendChild(thumbnail);
+    });
+
+    card.appendChild(gallery);
+  }
+
+  return card;
 }
 
-// LOAD BOTH JSON FILES
+/* ==========================================
+   CATEGORY-WISE PRODUCT GRID
+========================================== */
+
+function renderProductCatalog() {
+  const productsBox = $("products");
+
+  if (!productsBox) return;
+
+  productsBox.innerHTML = "";
+
+  const activeProducts = allProducts.filter(
+    product => product.active !== false
+  );
+
+  if (!activeProducts.length) {
+    productsBox.appendChild(
+      createElement(
+        "p",
+        "empty-message",
+        "Products coming soon."
+      )
+    );
+
+    return;
+  }
+
+  const categories = shopData.categories || [];
+
+  categories.forEach(category => {
+    if (category.active === false) return;
+
+    const categoryProducts = activeProducts.filter(
+      product => product.categoryId === category.id
+    );
+
+    if (!categoryProducts.length) return;
+
+    const categorySection = createElement(
+      "section",
+      "catalog-category"
+    );
+
+    const categoryHeading = createElement(
+      "h2",
+      "catalog-category-heading",
+      category.name
+    );
+
+    categorySection.appendChild(categoryHeading);
+
+    const subcategories = category.subcategories || [];
+
+    subcategories.forEach(subcategory => {
+      if (subcategory.active === false) return;
+
+      const products = categoryProducts.filter(
+        product =>
+          product.subcategoryId === subcategory.id
+      );
+
+      if (!products.length) return;
+
+      const group = createElement(
+        "div",
+        "catalog-product-group"
+      );
+
+      const heading = createElement(
+        "h3",
+        "catalog-subcategory-heading",
+        subcategory.name
+      );
+
+      const grid = createElement(
+        "div",
+        "product-grid"
+      );
+
+      products.forEach(product => {
+        grid.appendChild(
+          createProductCard(product)
+        );
+      });
+
+      group.append(heading, grid);
+
+      categorySection.appendChild(group);
+    });
+
+    productsBox.appendChild(categorySection);
+  });
+
+  /* Products with category IDs not found in shop JSON */
+
+  const knownCategoryIds = categories.map(
+    category => category.id
+  );
+
+  const unknownProducts = activeProducts.filter(
+    product => !knownCategoryIds.includes(product.categoryId)
+  );
+
+  if (unknownProducts.length) {
+    const extraSection = createElement(
+      "section",
+      "catalog-category"
+    );
+
+    const heading = createElement(
+      "h2",
+      "catalog-category-heading",
+      "Other Products"
+    );
+
+    const grid = createElement(
+      "div",
+      "product-grid"
+    );
+
+    unknownProducts.forEach(product => {
+      grid.appendChild(createProductCard(product));
+    });
+
+    extraSection.append(heading, grid);
+
+    productsBox.appendChild(extraSection);
+  }
+}
+
+/* ==========================================
+   WEBSITE DISPLAY MODE
+========================================== */
+
+function showFinalCatalog() {
+  const categoriesSection = $("categoriesSection");
+  const subcategoriesSection = $("subcategoriesSection");
+  const productsSection = $("productsSection");
+
+  if (categoriesSection) {
+    categoriesSection.hidden = true;
+  }
+
+  if (subcategoriesSection) {
+    subcategoriesSection.hidden = true;
+  }
+
+  if (productsSection) {
+    productsSection.hidden = false;
+  }
+
+  setText("productsHeading", "Our Products");
+
+  renderProductCatalog();
+}
+
+/* ==========================================
+   LOAD JSON FILES
+========================================== */
+
 async function loadWebsite() {
   try {
-    const [shopResponse, productsResponse] = await Promise.all([
-      fetch(SHOP_DATA_URL),
-      fetch(PRODUCTS_DATA_URL)
-    ]);
+    const [shopResponse, productsResponse] =
+      await Promise.all([
+        fetch(SHOP_DATA_URL),
+        fetch(PRODUCTS_DATA_URL)
+      ]);
 
     if (!shopResponse.ok) {
-      throw new Error("Shop JSON load nahi hua.");
+      throw new Error("Shop JSON file could not be loaded.");
     }
 
     if (!productsResponse.ok) {
-      throw new Error("Products JSON load nahi hua.");
+      throw new Error("Products JSON file could not be loaded.");
     }
 
     const shop = await shopResponse.json();
+
     const productData = await productsResponse.json();
 
-    allProducts = productData.products || [];
+    if (!Array.isArray(productData.products)) {
+      throw new Error("Products JSON format is incorrect.");
+    }
+
+    allProducts = productData.products;
 
     initializeShop(shop);
-    addProductsBackButton();
+
+    showFinalCatalog();
 
   } catch (error) {
     console.error("Website loading error:", error);
 
-    if (categoriesBox) {
-      categoriesBox.textContent =
-        "Website data load nahi ho paya. JSON file paths check karein.";
+    const productsBox = $("products");
+
+    if (productsBox) {
+      productsBox.textContent =
+        "Website data load nahi ho paya. JSON file paths aur format check karein.";
+    }
+
+    const productsSection = $("productsSection");
+
+    if (productsSection) {
+      productsSection.hidden = false;
     }
   }
 }
 
-loadWebsite();
+/* ==========================================
+   START WEBSITE
+========================================== */
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadWebsite();
+});
