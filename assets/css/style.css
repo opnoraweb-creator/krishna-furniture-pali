@@ -1,9 +1,8 @@
-/* =========================================
+/* ==========================================
    KRISHNA DECOR FURNITURE
-   MAIN WEBSITE STYLESHEET
-========================================= */
+   FINAL RESPONSIVE STYLESHEET
+========================================== */
 
-/* RESET */
 * {
   margin: 0;
   padding: 0;
@@ -49,9 +48,11 @@ img {
   max-width: 100%;
 }
 
-/* =========================================
-   HEADER
-========================================= */
+[hidden] {
+  display: none !important;
+}
+
+/* HEADER */
 
 .site-header {
   width: 100%;
@@ -106,16 +107,14 @@ img {
   margin-top: 4px;
 }
 
+/* SOCIAL BUTTONS */
+
 .header-social {
   display: flex;
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
 }
-
-/* =========================================
-   SOCIAL BUTTONS
-========================================= */
 
 .social-button {
   display: inline-flex;
@@ -180,9 +179,7 @@ img {
   stroke: none;
 }
 
-/* =========================================
-   MAIN LAYOUT
-========================================= */
+/* MAIN LAYOUT */
 
 .main-container {
   max-width: 1250px;
@@ -203,9 +200,7 @@ img {
   box-shadow: 0 4px 18px rgba(20, 65, 40, 0.055);
 }
 
-/* =========================================
-   HERO SECTION
-========================================= */
+/* HERO */
 
 .hero {
   grid-column: 1 / -1;
@@ -270,9 +265,7 @@ img {
   object-fit: cover;
 }
 
-/* =========================================
-   SECTION HEADINGS
-========================================= */
+/* SECTION HEADINGS */
 
 .section-heading {
   margin-bottom: 20px;
@@ -289,9 +282,7 @@ img {
   font-size: 13px;
 }
 
-/* =========================================
-   CATEGORY GRID
-========================================= */
+/* CATEGORY GRID */
 
 .category-grid {
   display: grid;
@@ -332,9 +323,115 @@ img {
   margin: 11px 3px 3px;
 }
 
-/* =========================================
-   ACTION BUTTONS
-========================================= */
+/* FINAL PRODUCT CATALOG */
+
+.catalog-category {
+  margin-bottom: 32px;
+  padding-bottom: 25px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.catalog-category:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.catalog-category-heading {
+  color: var(--dark-green);
+  font-size: 23px;
+  padding: 12px 15px;
+  margin-bottom: 22px;
+  background: var(--light-green);
+  border-left: 5px solid var(--main-green);
+  border-radius: 7px;
+}
+
+.catalog-product-group {
+  margin-bottom: 25px;
+}
+
+.catalog-subcategory-heading {
+  color: var(--dark-green);
+  font-size: 19px;
+  font-weight: 700;
+  padding-bottom: 9px;
+  margin-bottom: 14px;
+  border-bottom: 2px solid var(--border-color);
+}
+
+/* PRODUCT GRID */
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.product-card {
+  min-width: 0;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 13px;
+  padding: 10px;
+  box-shadow: 0 3px 12px rgba(20, 65, 40, 0.06);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(20, 65, 40, 0.12);
+}
+
+.product-image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+  background: var(--light-green);
+  border-radius: 9px;
+  cursor: zoom-in;
+}
+
+.product-card h3 {
+  color: var(--dark-green);
+  font-size: 14px;
+  margin: 10px 2px 4px;
+}
+
+.product-description {
+  color: var(--muted-text);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* PRODUCT GALLERY */
+
+.product-gallery {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 10px 2px 4px;
+  scrollbar-width: thin;
+}
+
+.gallery-thumb {
+  width: 58px;
+  height: 58px;
+  flex: 0 0 58px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid var(--border-color);
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.gallery-thumb:hover {
+  border-color: var(--main-green);
+  transform: scale(1.04);
+}
+
+/* ACTION BUTTONS */
 
 .action-button {
   display: inline-flex;
@@ -353,79 +450,7 @@ img {
   color: #ffffff;
 }
 
-/* =========================================
-   PRODUCTS
-========================================= */
-
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.product-card {
-  min-width: 0;
-  background: #ffffff;
-  border: 1px solid var(--border-color);
-  border-radius: 14px;
-  padding: 12px;
-  box-shadow: 0 3px 12px rgba(20, 65, 40, 0.06);
-  overflow: hidden;
-}
-
-.product-image {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  display: block;
-  background: var(--light-green);
-  border-radius: 10px;
-  cursor: zoom-in;
-}
-
-.product-card h3 {
-  color: var(--dark-green);
-  font-size: 16px;
-  margin: 11px 0 5px;
-}
-
-.product-description {
-  color: var(--muted-text);
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-/* =========================================
-   PRODUCT GALLERY
-========================================= */
-
-.product-gallery {
-  display: flex;
-  gap: 9px;
-  overflow-x: auto;
-  padding: 11px 2px 5px;
-  scrollbar-width: thin;
-}
-
-.gallery-thumb {
-  width: 65px;
-  height: 65px;
-  flex: 0 0 65px;
-  object-fit: cover;
-  border-radius: 9px;
-  border: 2px solid var(--border-color);
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-.gallery-thumb:hover {
-  border-color: var(--main-green);
-  transform: scale(1.04);
-}
-
-/* =========================================
-   BACK BUTTON
-========================================= */
+/* BACK BUTTON */
 
 .back-button {
   display: inline-flex;
@@ -440,16 +465,9 @@ img {
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-  transition: 0.2s ease;
 }
 
-.back-button:hover {
-  background: var(--main-green);
-}
-
-/* =========================================
-   EMPTY MESSAGE
-========================================= */
+/* EMPTY MESSAGE */
 
 .empty-message {
   grid-column: 1 / -1;
@@ -461,9 +479,7 @@ img {
   text-align: center;
 }
 
-/* =========================================
-   LOCATION
-========================================= */
+/* LOCATION */
 
 .location-details {
   display: flex;
@@ -499,9 +515,7 @@ img {
   line-height: 1.7;
 }
 
-/* =========================================
-   CONTACT
-========================================= */
+/* CONTACT */
 
 .contact-details {
   background: #f5faf5;
@@ -520,9 +534,7 @@ img {
   color: var(--dark-green);
 }
 
-/* =========================================
-   FOOTER
-========================================= */
+/* FOOTER */
 
 .site-footer {
   background: var(--dark-green);
@@ -554,9 +566,7 @@ img {
   color: #b6d2bd;
 }
 
-/* =========================================
-   FULL SCREEN PHOTO VIEWER
-========================================= */
+/* FULL SCREEN PHOTO VIEWER */
 
 .photo-overlay {
   position: fixed;
@@ -615,26 +625,12 @@ img {
   right: 12px;
 }
 
-/* =========================================
-   HIDDEN ELEMENTS
-========================================= */
-
-[hidden] {
-  display: none !important;
-}
-
-/* =========================================
-   TABLET RESPONSIVE
-========================================= */
+/* TABLET */
 
 @media (max-width: 900px) {
 
   .site-header {
     padding: 15px 3%;
-  }
-
-  .header-inner {
-    gap: 15px;
   }
 
   .brand h1 {
@@ -659,11 +655,13 @@ img {
     height: 155px;
     flex-basis: 155px;
   }
+
+  .product-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
-/* =========================================
-   MOBILE RESPONSIVE
-========================================= */
+/* MOBILE */
 
 @media (max-width: 650px) {
 
@@ -750,8 +748,7 @@ img {
     font-size: 20px;
   }
 
-  .category-grid,
-  .product-grid {
+  .category-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
   }
@@ -765,12 +762,26 @@ img {
     margin: 8px 2px 3px;
   }
 
+  .catalog-category-heading {
+    font-size: 19px;
+    padding: 10px 12px;
+  }
+
+  .catalog-subcategory-heading {
+    font-size: 16px;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
   .product-card {
     padding: 8px;
   }
 
   .product-card h3 {
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .product-description {
@@ -778,9 +789,9 @@ img {
   }
 
   .gallery-thumb {
-    width: 57px;
-    height: 57px;
-    flex-basis: 57px;
+    width: 54px;
+    height: 54px;
+    flex-basis: 54px;
   }
 
   .action-button {
@@ -817,9 +828,7 @@ img {
   }
 }
 
-/* =========================================
-   SMALL MOBILE
-========================================= */
+/* SMALL MOBILE */
 
 @media (max-width: 360px) {
 
@@ -829,11 +838,6 @@ img {
 
   .social-button {
     font-size: 10px;
-  }
-
-  .category-grid,
-  .product-grid {
-    gap: 8px;
   }
 
   .section-card {
