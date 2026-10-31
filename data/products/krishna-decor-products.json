@@ -7,7 +7,10 @@
       "categoryId": "furniture-home-decor",
       "subcategoryId": "sofa",
       "image": "assets/images/products/sofa/sofa-1.jpg",
-      "gallery": [],
+      "gallery": [
+        "assets/images/products/sofa/sofa-1-side.jpg",
+        "assets/images/products/sofa/sofa-1-back.jpg"
+      ],
       "description": "",
       "active": true
     },
@@ -42,31 +45,11 @@
       "active": true
     },
     {
-      "id": "chair-2",
-      "name": "Chair 2",
-      "categoryId": "furniture-home-decor",
-      "subcategoryId": "chair",
-      "image": "assets/images/products/chair/chair-2.jpg",
-      "gallery": [],
-      "description": "",
-      "active": true
-    },
-    {
       "id": "bed-1",
       "name": "Bed 1",
       "categoryId": "furniture-home-decor",
       "subcategoryId": "bed",
       "image": "assets/images/products/Bed/bed-1.jpg",
-      "gallery": [],
-      "description": "",
-      "active": true
-    },
-    {
-      "id": "bed-2",
-      "name": "Bed 2",
-      "categoryId": "furniture-home-decor",
-      "subcategoryId": "bed",
-      "image": "assets/images/products/Bed/bed-2.jpg",
       "gallery": [],
       "description": "",
       "active": true
