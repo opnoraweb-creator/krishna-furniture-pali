@@ -1,7 +1,7 @@
 /* ==========================================
    KRISHNA DECOR FURNITURE
    FINAL WEBSITE JAVASCRIPT
-   CATEGORY-WISE PRODUCT GRID
+   UNLIMITED PRODUCT PHOTOS
 ========================================== */
 
 const SHOP_DATA_URL = "data/shops/krishna-decor.json";
@@ -31,30 +31,19 @@ function setText(id, value) {
 
 function setLink(id, url) {
   const element = $(id);
-
-  if (element && url) {
-    element.href = url;
-  }
+  if (element && url) element.href = url;
 }
 
 function setImage(id, url) {
   const element = $(id);
-
-  if (element && url) {
-    element.src = url;
-  }
+  if (element && url) element.src = url;
 }
 
 function createElement(tag, className, text) {
   const element = document.createElement(tag);
 
-  if (className) {
-    element.className = className;
-  }
-
-  if (text !== undefined) {
-    element.textContent = text;
-  }
+  if (className) element.className = className;
+  if (text !== undefined) element.textContent = text;
 
   return element;
 }
@@ -79,9 +68,7 @@ function initializeShop(data) {
   setImage("ownerPhoto", data.ownerPhoto);
 
   const phoneUrl = `tel:${data.phone || ""}`;
-
-  const whatsappUrl =
-    `https://wa.me/${data.whatsapp || ""}`;
+  const whatsappUrl = `https://wa.me/${data.whatsapp || ""}`;
 
   ["callTop", "callButton", "contactCall"].forEach(id => {
     setLink(id, phoneUrl);
@@ -91,139 +78,48 @@ function initializeShop(data) {
     setLink(id, whatsappUrl);
   });
 
-  setLink(
-    "instagramTop",
-    data.instagram || DEFAULT_INSTAGRAM_URL
-  );
-
-  setLink(
-    "mapLink",
-    data.mapUrl || DEFAULT_MAP_URL
-  );
+  setLink("instagramTop", data.instagram || DEFAULT_INSTAGRAM_URL);
+  setLink("mapLink", data.mapUrl || DEFAULT_MAP_URL);
 }
 
 /* ==========================================
-   CATEGORY NAME HELPERS
-========================================== */
-
-function getCategoryName(categoryId) {
-  const categories = shopData.categories || [];
-
-  const category = categories.find(
-    item => item.id === categoryId
-  );
-
-  return category ? category.name : categoryId;
-}
-
-function getSubcategoryName(categoryId, subcategoryId) {
-  const categories = shopData.categories || [];
-
-  const category = categories.find(
-    item => item.id === categoryId
-  );
-
-  if (category && category.subcategories) {
-    const subcategory = category.subcategories.find(
-      item => item.id === subcategoryId
-    );
-
-    if (subcategory) {
-      return subcategory.name;
-    }
-  }
-
-  const names = {
-    "sofa": "Sofa",
-    "chair": "Chair",
-    "table": "Table",
-    "bed": "Bed",
-    "door": "Door",
-    "home-decor": "Home Decor",
-    "furniture-other": "Other",
-    "window": "Window",
-    "glass": "Glass",
-    "gate": "Gate",
-    "building-other": "Other",
-    "office-chair": "Chair",
-    "office-table": "Table",
-    "office-other": "Other"
-  };
-
-  return names[subcategoryId] || subcategoryId;
-}
-
-/* ==========================================
-   PRODUCT IMAGE VIEWER
+   PHOTO VIEWER
 ========================================== */
 
 function openPhoto(images, startIndex = 0) {
-  if (!images || !images.length) return;
+  if (!images.length) return;
 
   let currentIndex = startIndex;
 
-  const overlay = createElement(
-    "div",
-    "photo-overlay"
-  );
+  const overlay = createElement("div", "photo-overlay");
+  const image = createElement("img", "photo-viewer-image");
 
-  const image = createElement(
-    "img",
-    "photo-viewer-image"
-  );
-
-  const closeButton = createElement(
-    "button",
-    "photo-close",
-    "×"
-  );
-
-  const previousButton = createElement(
-    "button",
-    "photo-previous",
-    "‹"
-  );
-
-  const nextButton = createElement(
-    "button",
-    "photo-next",
-    "›"
-  );
+  const closeButton = createElement("button", "photo-close", "×");
+  const previousButton = createElement("button", "photo-previous", "‹");
+  const nextButton = createElement("button", "photo-next", "›");
 
   closeButton.type = "button";
   previousButton.type = "button";
   nextButton.type = "button";
-
-  closeButton.setAttribute("aria-label", "Close image");
-  previousButton.setAttribute("aria-label", "Previous image");
-  nextButton.setAttribute("aria-label", "Next image");
 
   function updateImage() {
     image.src = images[currentIndex];
   }
 
   previousButton.addEventListener("click", () => {
-    currentIndex =
-      (currentIndex - 1 + images.length) % images.length;
-
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
     updateImage();
   });
 
   nextButton.addEventListener("click", () => {
-    currentIndex =
-      (currentIndex + 1) % images.length;
-
+    currentIndex = (currentIndex + 1) % images.length;
     updateImage();
   });
 
-  closeButton.addEventListener("click", () => {
-    overlay.remove();
-  });
+  closeButton.addEventListener("click", () => overlay.remove());
 
   overlay.addEventListener("click", event => {
-    if (event.target === overlay) {
-      overlay.remove();
-    }
+    if (event.target === overlay) overlay.remove();
   });
 
   function keyboardHandler(event) {
@@ -237,112 +133,64 @@ function openPhoto(images, startIndex = 0) {
       document.removeEventListener("keydown", keyboardHandler);
     }
 
-    if (event.key === "ArrowRight") {
-      nextButton.click();
-    }
-
-    if (event.key === "ArrowLeft") {
-      previousButton.click();
-    }
+    if (event.key === "ArrowRight") nextButton.click();
+    if (event.key === "ArrowLeft") previousButton.click();
   }
 
   document.addEventListener("keydown", keyboardHandler);
 
-  overlay.append(
-    closeButton,
-    previousButton,
-    image,
-    nextButton
-  );
-
+  overlay.append(closeButton, previousButton, image, nextButton);
   document.body.appendChild(overlay);
 
   updateImage();
 }
 
 /* ==========================================
-   PRODUCT CARD
+   GET ALL PHOTOS OF A PRODUCT
 ========================================== */
 
-function createProductCard(product) {
-  const card = createElement(
-    "article",
-    "product-card"
-  );
-
-  const images = [
+function getProductImages(product) {
+  const photos = [
     product.image,
-    ...(product.gallery || [])
-  ].filter((image, index, array) => {
-    return image && array.indexOf(image) === index;
+    ...(Array.isArray(product.gallery) ? product.gallery : [])
+  ];
+
+  return photos.filter((photo, index) => {
+    return photo && photos.indexOf(photo) === index;
   });
+}
 
-  const mainImage = createElement(
-    "img",
-    "product-image"
-  );
+/* ==========================================
+   PRODUCT PHOTO CARD
+   LABEL ONLY: 1, 2, 3...
+========================================== */
 
-  mainImage.src = images[0] || "";
-  mainImage.alt = product.name || "Furniture product";
-  mainImage.loading = "lazy";
+function createPhotoCard(imagePath, number, productName) {
+  const card = createElement("article", "product-card");
 
-  mainImage.addEventListener("click", () => {
-    openPhoto(images, 0);
+  const image = createElement("img", "product-image");
+
+  image.src = imagePath;
+  image.alt = productName || "Furniture";
+  image.loading = "lazy";
+
+  image.addEventListener("click", () => {
+    openPhoto([imagePath]);
   });
 
   const title = createElement(
     "h3",
     "product-title",
-    product.name || "Product"
+    String(number)
   );
 
-  card.append(mainImage, title);
-
-  if (product.description) {
-    const description = createElement(
-      "p",
-      "product-description",
-      product.description
-    );
-
-    card.appendChild(description);
-  }
-
-  /* PRODUCT GALLERY */
-
-  if (images.length > 1) {
-    const gallery = createElement(
-      "div",
-      "product-gallery"
-    );
-
-    images.forEach((imagePath, index) => {
-      const thumbnail = createElement(
-        "img",
-        "gallery-thumb"
-      );
-
-      thumbnail.src = imagePath;
-      thumbnail.alt =
-        `${product.name} photo ${index + 1}`;
-
-      thumbnail.loading = "lazy";
-
-      thumbnail.addEventListener("click", () => {
-        openPhoto(images, index);
-      });
-
-      gallery.appendChild(thumbnail);
-    });
-
-    card.appendChild(gallery);
-  }
+  card.append(image, title);
 
   return card;
 }
 
 /* ==========================================
-   CATEGORY-WISE PRODUCT GRID
+   CATEGORY-WISE UNLIMITED PHOTO GRID
 ========================================== */
 
 function renderProductCatalog() {
@@ -358,13 +206,8 @@ function renderProductCatalog() {
 
   if (!activeProducts.length) {
     productsBox.appendChild(
-      createElement(
-        "p",
-        "empty-message",
-        "Products coming soon."
-      )
+      createElement("p", "empty-message", "Products coming soon.")
     );
-
     return;
   }
 
@@ -398,8 +241,7 @@ function renderProductCatalog() {
       if (subcategory.active === false) return;
 
       const products = categoryProducts.filter(
-        product =>
-          product.subcategoryId === subcategory.id
+        product => product.subcategoryId === subcategory.id
       );
 
       if (!products.length) return;
@@ -415,26 +257,36 @@ function renderProductCatalog() {
         subcategory.name
       );
 
-      const grid = createElement(
-        "div",
-        "product-grid"
-      );
+      const grid = createElement("div", "product-grid");
+
+      /* Har photo ko alag card mein dikhana */
+
+      let photoNumber = 1;
 
       products.forEach(product => {
-        grid.appendChild(
-          createProductCard(product)
-        );
+        const images = getProductImages(product);
+
+        images.forEach(imagePath => {
+          grid.appendChild(
+            createPhotoCard(
+              imagePath,
+              photoNumber,
+              product.name
+            )
+          );
+
+          photoNumber++;
+        });
       });
 
       group.append(heading, grid);
-
       categorySection.appendChild(group);
     });
 
     productsBox.appendChild(categorySection);
   });
 
-  /* Products with category IDs not found in shop JSON */
+  /* Unknown category products */
 
   const knownCategoryIds = categories.map(
     category => category.id
@@ -456,17 +308,21 @@ function renderProductCatalog() {
       "Other Products"
     );
 
-    const grid = createElement(
-      "div",
-      "product-grid"
-    );
+    const grid = createElement("div", "product-grid");
+
+    let photoNumber = 1;
 
     unknownProducts.forEach(product => {
-      grid.appendChild(createProductCard(product));
+      getProductImages(product).forEach(imagePath => {
+        grid.appendChild(
+          createPhotoCard(imagePath, photoNumber, product.name)
+        );
+
+        photoNumber++;
+      });
     });
 
     extraSection.append(heading, grid);
-
     productsBox.appendChild(extraSection);
   }
 }
@@ -480,17 +336,9 @@ function showFinalCatalog() {
   const subcategoriesSection = $("subcategoriesSection");
   const productsSection = $("productsSection");
 
-  if (categoriesSection) {
-    categoriesSection.hidden = true;
-  }
-
-  if (subcategoriesSection) {
-    subcategoriesSection.hidden = true;
-  }
-
-  if (productsSection) {
-    productsSection.hidden = false;
-  }
+  if (categoriesSection) categoriesSection.hidden = true;
+  if (subcategoriesSection) subcategoriesSection.hidden = true;
+  if (productsSection) productsSection.hidden = false;
 
   setText("productsHeading", "Our Products");
 
@@ -503,11 +351,10 @@ function showFinalCatalog() {
 
 async function loadWebsite() {
   try {
-    const [shopResponse, productsResponse] =
-      await Promise.all([
-        fetch(SHOP_DATA_URL),
-        fetch(PRODUCTS_DATA_URL)
-      ]);
+    const [shopResponse, productsResponse] = await Promise.all([
+      fetch(SHOP_DATA_URL),
+      fetch(PRODUCTS_DATA_URL)
+    ]);
 
     if (!shopResponse.ok) {
       throw new Error("Shop JSON file could not be loaded.");
@@ -518,7 +365,6 @@ async function loadWebsite() {
     }
 
     const shop = await shopResponse.json();
-
     const productData = await productsResponse.json();
 
     if (!Array.isArray(productData.products)) {
@@ -528,7 +374,6 @@ async function loadWebsite() {
     allProducts = productData.products;
 
     initializeShop(shop);
-
     showFinalCatalog();
 
   } catch (error) {
