@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://krishna-furniture-pali.digiprofiles.in/sitemap.xml
+Sitemap: https://krishna-decor-furniture-pali.digiprofiles.in/sitemap.xml
