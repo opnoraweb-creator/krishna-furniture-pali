@@ -1,51 +1,78 @@
-# Krishna Decor Furniture - DigiProfiles starter
+# Krishna Decor Furniture – Pali
 
-Repository target: `opnoraweb-creator/krishna-furniture-pali`
+Business profile website for Krishna Decor Furniture, Pali, Rajasthan.
 
-## Included
-- Public profile page (`index.html`)
-- Category and product rendering from `data/shops/krishna-decor.json`
-- Shopkeeper portal (`shopkeeper/index.html`)
-- Cloudflare Worker source (`worker/worker.js`) for protected upload + GitHub JSON updates
-- Cloudinary image hosting; images are not stored in GitHub
+## Business Details
 
-## Important before publishing
-This is a starter implementation. The shopkeeper portal will NOT work until the Cloudflare Worker and Cloudinary account are configured.
+- Name: Krishna Decor Furniture
+- Location: Pali, Rajasthan
+- Phone: 9829781979
+- WhatsApp: 919829781979
 
-### 1. Add profile photos
-Put `shop-icon.png` and `owner-photo.jpg` in `assets/images/`. Replace the placeholder files with the real shop icon and owner photo.
+## Project Structure
 
-### 2. GitHub Pages
-Upload the project files to the root of `opnoraweb-creator/krishna-furniture-pali`.
-Enable Pages from Settings -> Pages -> Deploy from branch -> `main` -> `/ (root)`.
+```text
+krishna-furniture-pali/
+│
+├── index.html
+├── README.md
+│
+├── assets/
+│   ├── css/
+│   │   └── style.css
+│   │
+│   ├── js/
+│   │   └── main.js
+│   │
+│   └── images/
+│       ├── shop-icon.png
+│       ├── owner-photo.jpg
+│       │
+│       └── categories/
+│
+└── data/
+    └── shops/
+        └── krishna-decor.json
+```
 
-### 3. Cloudinary
-Create a Cloudinary account and note cloud name, API key and API secret. Never put API secret in browser code or GitHub.
+## Image Upload Instructions
 
-### 4. Cloudflare Worker
-Deploy `worker/worker.js` as a Cloudflare Worker. Set vars:
-- `GITHUB_OWNER=opnoraweb-creator`
-- `GITHUB_REPO=krishna-furniture-pali`
-- `GITHUB_BRANCH=main`
-- `CLOUDINARY_CLOUD_NAME`
-- `CLOUDINARY_API_KEY`
+Upload images to the exact folders and use the exact filenames mentioned in the JSON file.
 
-Set secrets using Wrangler:
-- `wrangler secret put SHOP_PIN`
-- `wrangler secret put GITHUB_TOKEN` (fine-grained token limited to this repository, Contents: Read and write)
-- `wrangler secret put CLOUDINARY_API_SECRET`
+Example:
 
-### 5. Connect portal to Worker
-In `shopkeeper/js/app.js`, replace `https://YOUR-WORKER.YOUR-SUBDOMAIN.workers.dev` with your deployed Worker URL.
+- `assets/images/shop-icon.png`
+- `assets/images/owner-photo.jpg`
+- `assets/images/categories/sofa.jpg`
+- `assets/images/categories/chair.jpg`
+- `assets/images/categories/table.jpg`
 
-### 6. Protect the editor
-Give the shop PIN only to the shopkeeper. Do not place the PIN or GitHub token in public HTML/JS. The Worker checks the PIN and keeps GitHub/Cloudinary secrets server-side.
+Important:
+- Use lowercase English filenames.
+- Avoid spaces in filenames.
+- Keep file extensions correct (`.jpg`, `.png`, `.webp`).
+- The filename in JSON must match the uploaded filename exactly.
+- GitHub Pages filenames are case-sensitive.
 
-## Current shop data
-Edit `data/shops/krishna-decor.json` for initial shop details. Category and product data will be added through the shopkeeper portal after Worker setup.
+## Adding Products
 
-## Important limitations
-- Public GitHub repository means website code and JSON are public. Do not store private customer information.
-- Cloudinary images are publicly viewable if their URLs are used on the public profile.
-- GitHub Pages updates can take a short time to publish after a commit.
-- Use a long unique shop PIN. For production, add rate limiting and a stronger login flow.
+Products will be added to:
+
+`data/shops/krishna-decor.json`
+
+Each product will contain:
+
+- Product name
+- Main category ID
+- Subcategory ID
+- Description
+- Main image
+- Additional gallery images
+
+## Website Hosting
+
+This website is designed for GitHub Pages.
+
+No Firebase, Cloudflare Worker, database, or separate server is required.
+
+Upload the files to the GitHub repository and enable GitHub Pages from repository settings.
