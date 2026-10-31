@@ -1,0 +1,20 @@
+{
+  "shopId": "krishna-decor-furniture",
+
+  "products": [
+    {
+      "id": "product-001",
+      "name": "Product Name",
+      "categoryId": "furniture-home-decor",
+      "subcategoryId": "sofa",
+      "description": "Write product details here.",
+      "image": "assets/images/products/product-001/main.jpg",
+      "gallery": [
+        "assets/images/products/product-001/main.jpg",
+        "assets/images/products/product-001/photo-2.jpg",
+        "assets/images/products/product-001/photo-3.jpg"
+      ],
+      "active": true
+    }
+  ]
+}
