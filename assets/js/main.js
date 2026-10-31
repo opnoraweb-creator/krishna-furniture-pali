@@ -1,19 +1,21 @@
 /* ==========================================
    KRISHNA DECOR FURNITURE
-   FINAL WEBSITE JAVASCRIPT
-   UNLIMITED PRODUCT PHOTOS
+   AUTOMATIC GITHUB PRODUCT GALLERY
+   NEW FOLDER = NEW CATEGORY
 ========================================== */
 
 const SHOP_DATA_URL = "data/shops/krishna-decor.json";
-const PRODUCTS_DATA_URL = "data/products/krishna-decor-products.json";
 
-const DEFAULT_MAP_URL = "https://maps.app.goo.gl/byF8p2iFVTduc25B6";
+const GITHUB_API =
+  "https://api.github.com/repos/opnoraweb-creator/krishna-furniture-pali/contents/assets/images/products";
+
+const DEFAULT_MAP_URL =
+  "https://maps.app.goo.gl/byF8p2iFVTduc25B6";
 
 const DEFAULT_INSTAGRAM_URL =
   "https://www.instagram.com/krishna_decor_furniture_pali?psln=cWV1c2xmZmY1b2Nk";
 
 let shopData = {};
-let allProducts = [];
 
 const $ = id => document.getElementById(id);
 
@@ -146,32 +148,37 @@ function openPhoto(images, startIndex = 0) {
 }
 
 /* ==========================================
-   GET ALL PHOTOS OF A PRODUCT
+   IMAGE FILE HELPERS
 ========================================== */
 
-function getProductImages(product) {
-  const photos = [
-    product.image,
-    ...(Array.isArray(product.gallery) ? product.gallery : [])
-  ];
+function isImageFile(file) {
+  return /\.(jpg|jpeg|png|webp|gif)$/i.test(file.name);
+}
 
-  return photos.filter((photo, index) => {
-    return photo && photos.indexOf(photo) === index;
-  });
+function getPhotoNumber(fileName, index) {
+  const nameWithoutExtension = fileName.replace(/\.[^.]+$/, "");
+  const match = nameWithoutExtension.match(/\d+/);
+
+  return match ? Number(match[0]) : index + 1;
+}
+
+function formatCategoryName(folderName) {
+  return folderName
+    .replace(/[-_]+/g, " ")
+    .replace(/\b\w/g, letter => letter.toUpperCase());
 }
 
 /* ==========================================
    PRODUCT PHOTO CARD
-   LABEL ONLY: 1, 2, 3...
 ========================================== */
 
-function createPhotoCard(imagePath, number, productName) {
+function createPhotoCard(imagePath, number, categoryName) {
   const card = createElement("article", "product-card");
 
   const image = createElement("img", "product-image");
 
   image.src = imagePath;
-  image.alt = productName || "Furniture";
+  image.alt = `${categoryName} ${number}`;
   image.loading = "lazy";
 
   image.addEventListener("click", () => {
@@ -190,140 +197,149 @@ function createPhotoCard(imagePath, number, productName) {
 }
 
 /* ==========================================
-   CATEGORY-WISE UNLIMITED PHOTO GRID
+   GITHUB API
+   GET ALL CATEGORY FOLDERS
 ========================================== */
 
-function renderProductCatalog() {
+async function getGitHubFolders() {
+  const response = await fetch(GITHUB_API, {
+    headers: {
+      Accept: "application/vnd.github+json"
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `GitHub folder loading failed: ${response.status}`
+    );
+  }
+
+  const items = await response.json();
+
+  return items
+    .filter(item => item.type === "dir")
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
+/* ==========================================
+   GITHUB API
+   GET IMAGES FROM CATEGORY FOLDER
+========================================== */
+
+async function getFolderImages(folderName) {
+  const folderUrl =
+    `${GITHUB_API}/${encodeURIComponent(folderName)}`;
+
+  const response = await fetch(folderUrl, {
+    headers: {
+      Accept: "application/vnd.github+json"
+    }
+  });
+
+  if (!response.ok) {
+    console.warn("Folder could not load:", folderName);
+    return [];
+  }
+
+  const files = await response.json();
+
+  return files
+    .filter(file =>
+      file.type === "file" &&
+      isImageFile(file) &&
+      file.download_url
+    )
+    .sort((a, b) => {
+      const numberA = getPhotoNumber(a.name, 0);
+      const numberB = getPhotoNumber(b.name, 0);
+
+      return numberA - numberB ||
+        a.name.localeCompare(b.name);
+    });
+}
+
+/* ==========================================
+   AUTOMATIC PRODUCT CATALOG
+========================================== */
+
+async function renderProductCatalog() {
   const productsBox = $("products");
 
   if (!productsBox) return;
 
   productsBox.innerHTML = "";
 
-  const activeProducts = allProducts.filter(
-    product => product.active !== false
+  productsBox.appendChild(
+    createElement("p", "empty-message", "Loading products...")
   );
 
-  if (!activeProducts.length) {
-    productsBox.appendChild(
-      createElement("p", "empty-message", "Products coming soon.")
-    );
-    return;
-  }
+  try {
+    const folders = await getGitHubFolders();
 
-  const categories = shopData.categories || [];
+    productsBox.innerHTML = "";
 
-  categories.forEach(category => {
-    if (category.active === false) return;
+    let totalPhotos = 0;
 
-    const categoryProducts = activeProducts.filter(
-      product => product.categoryId === category.id
-    );
+    for (const folder of folders) {
+      const images = await getFolderImages(folder.name);
 
-    if (!categoryProducts.length) return;
+      if (!images.length) continue;
 
-    const categorySection = createElement(
-      "section",
-      "catalog-category"
-    );
+      const categoryName = formatCategoryName(folder.name);
 
-    const categoryHeading = createElement(
-      "h2",
-      "catalog-category-heading",
-      category.name
-    );
-
-    categorySection.appendChild(categoryHeading);
-
-    const subcategories = category.subcategories || [];
-
-    subcategories.forEach(subcategory => {
-      if (subcategory.active === false) return;
-
-      const products = categoryProducts.filter(
-        product => product.subcategoryId === subcategory.id
-      );
-
-      if (!products.length) return;
-
-      const group = createElement(
-        "div",
-        "catalog-product-group"
+      const categorySection = createElement(
+        "section",
+        "catalog-category"
       );
 
       const heading = createElement(
-        "h3",
-        "catalog-subcategory-heading",
-        subcategory.name
+        "h2",
+        "catalog-category-heading",
+        categoryName
       );
 
       const grid = createElement("div", "product-grid");
 
-      /* Har photo ko alag card mein dikhana */
+      images.forEach((file, index) => {
+        const number = getPhotoNumber(file.name, index);
 
-      let photoNumber = 1;
-
-      products.forEach(product => {
-        const images = getProductImages(product);
-
-        images.forEach(imagePath => {
-          grid.appendChild(
-            createPhotoCard(
-              imagePath,
-              photoNumber,
-              product.name
-            )
-          );
-
-          photoNumber++;
-        });
-      });
-
-      group.append(heading, grid);
-      categorySection.appendChild(group);
-    });
-
-    productsBox.appendChild(categorySection);
-  });
-
-  /* Unknown category products */
-
-  const knownCategoryIds = categories.map(
-    category => category.id
-  );
-
-  const unknownProducts = activeProducts.filter(
-    product => !knownCategoryIds.includes(product.categoryId)
-  );
-
-  if (unknownProducts.length) {
-    const extraSection = createElement(
-      "section",
-      "catalog-category"
-    );
-
-    const heading = createElement(
-      "h2",
-      "catalog-category-heading",
-      "Other Products"
-    );
-
-    const grid = createElement("div", "product-grid");
-
-    let photoNumber = 1;
-
-    unknownProducts.forEach(product => {
-      getProductImages(product).forEach(imagePath => {
         grid.appendChild(
-          createPhotoCard(imagePath, photoNumber, product.name)
+          createPhotoCard(
+            file.download_url,
+            number,
+            categoryName
+          )
         );
 
-        photoNumber++;
+        totalPhotos++;
       });
-    });
 
-    extraSection.append(heading, grid);
-    productsBox.appendChild(extraSection);
+      categorySection.append(heading, grid);
+      productsBox.appendChild(categorySection);
+    }
+
+    if (totalPhotos === 0) {
+      productsBox.appendChild(
+        createElement(
+          "p",
+          "empty-message",
+          "Products coming soon."
+        )
+      );
+    }
+
+  } catch (error) {
+    console.error("Product catalog error:", error);
+
+    productsBox.innerHTML = "";
+
+    productsBox.appendChild(
+      createElement(
+        "p",
+        "empty-message",
+        "Products load nahi ho paye. GitHub repository aur internet connection check karein."
+      )
+    );
   }
 }
 
@@ -346,32 +362,18 @@ function showFinalCatalog() {
 }
 
 /* ==========================================
-   LOAD JSON FILES
+   LOAD SHOP DATA
 ========================================== */
 
 async function loadWebsite() {
   try {
-    const [shopResponse, productsResponse] = await Promise.all([
-      fetch(SHOP_DATA_URL),
-      fetch(PRODUCTS_DATA_URL)
-    ]);
+    const shopResponse = await fetch(SHOP_DATA_URL);
 
     if (!shopResponse.ok) {
       throw new Error("Shop JSON file could not be loaded.");
     }
 
-    if (!productsResponse.ok) {
-      throw new Error("Products JSON file could not be loaded.");
-    }
-
     const shop = await shopResponse.json();
-    const productData = await productsResponse.json();
-
-    if (!Array.isArray(productData.products)) {
-      throw new Error("Products JSON format is incorrect.");
-    }
-
-    allProducts = productData.products;
 
     initializeShop(shop);
     showFinalCatalog();
@@ -383,7 +385,7 @@ async function loadWebsite() {
 
     if (productsBox) {
       productsBox.textContent =
-        "Website data load nahi ho paya. JSON file paths aur format check karein.";
+        "Website data load nahi ho paya. Shop JSON file check karein.";
     }
 
     const productsSection = $("productsSection");
