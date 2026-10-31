@@ -20,12 +20,17 @@
       "name": "Furniture & Home Decor",
       "image": "assets/images/categories/furniture-home-decor.jpg",
       "active": true,
-
       "subcategories": [
         {
           "id": "sofa",
           "name": "Sofa",
           "image": "assets/images/categories/sofa.jpg",
+          "active": true
+        },
+        {
+          "id": "bed",
+          "name": "Bed",
+          "image": "assets/images/categories/bed.jpg",
           "active": true
         },
         {
@@ -66,7 +71,6 @@
       "name": "Building Material",
       "image": "assets/images/categories/building-material.jpg",
       "active": true,
-
       "subcategories": [
         {
           "id": "window",
@@ -100,7 +104,6 @@
       "name": "Office Material",
       "image": "assets/images/categories/office-material.jpg",
       "active": true,
-
       "subcategories": [
         {
           "id": "office-chair",
@@ -122,7 +125,5 @@
         }
       ]
     }
-  ],
-
-  "products": []
+  ]
 }
