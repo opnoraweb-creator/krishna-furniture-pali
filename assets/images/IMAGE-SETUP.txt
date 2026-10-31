@@ -1,0 +1,5 @@
+Add your real images here:
+- shop-icon.png       : small shop logo/icon used in header and browser favicon
+- owner-photo.jpg     : owner's main portrait photo
+You can also add category/product placeholder images if desired.
+Do not upload private or confidential photos to a public GitHub repository.
