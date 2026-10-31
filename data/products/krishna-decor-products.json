@@ -1,19 +1,84 @@
 {
   "shopId": "krishna-decor-furniture",
-
   "products": [
     {
-      "id": "product-001",
-      "name": "Product Name",
+      "id": "sofa-1",
+      "name": "Sofa 1",
       "categoryId": "furniture-home-decor",
       "subcategoryId": "sofa",
-      "description": "Write product details here.",
-      "image": "assets/images/products/product-001/main.jpg",
-      "gallery": [
-        "assets/images/products/product-001/main.jpg",
-        "assets/images/products/product-001/photo-2.jpg",
-        "assets/images/products/product-001/photo-3.jpg"
-      ],
+      "image": "assets/images/products/sofa/sofa-1.jpg",
+      "gallery": [],
+      "description": "",
+      "active": true
+    },
+    {
+      "id": "sofa-2",
+      "name": "Sofa 2",
+      "categoryId": "furniture-home-decor",
+      "subcategoryId": "sofa",
+      "image": "assets/images/products/sofa/sofa-2.jpg",
+      "gallery": [],
+      "description": "",
+      "active": true
+    },
+    {
+      "id": "sofa-3",
+      "name": "Sofa 3",
+      "categoryId": "furniture-home-decor",
+      "subcategoryId": "sofa",
+      "image": "assets/images/products/sofa/sofa-3.jpg",
+      "gallery": [],
+      "description": "",
+      "active": true
+    },
+    {
+      "id": "chair-1",
+      "name": "Chair 1",
+      "categoryId": "furniture-home-decor",
+      "subcategoryId": "chair",
+      "image": "assets/images/products/chair/chair-1.jpg",
+      "gallery": [],
+      "description": "",
+      "active": true
+    },
+    {
+      "id": "chair-2",
+      "name": "Chair 2",
+      "categoryId": "furniture-home-decor",
+      "subcategoryId": "chair",
+      "image": "assets/images/products/chair/chair-2.jpg",
+      "gallery": [],
+      "description": "",
+      "active": true
+    },
+    {
+      "id": "bed-1",
+      "name": "Bed 1",
+      "categoryId": "furniture-home-decor",
+      "subcategoryId": "bed",
+      "image": "assets/images/products/Bed/bed-1.jpg",
+      "gallery": [],
+      "description": "",
+      "active": true
+    },
+    {
+      "id": "bed-2",
+      "name": "Bed 2",
+      "categoryId": "furniture-home-decor",
+      "subcategoryId": "bed",
+      "image": "assets/images/products/Bed/bed-2.jpg",
+      "gallery": [],
+      "description": "",
+      "active": true
+    },
+    {
+      "id": "table-1",
+      "name": "Table 1",
+      "categoryId": "furniture-home-decor",
+      "subcategoryId": "table",
+      "image": "assets/images/products/table/table-1.jpg",
+      "gallery": [],
+      "description": "",
       "active": true
     }
   ]
